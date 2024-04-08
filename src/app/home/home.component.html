@@ -1,0 +1,73 @@
+<div class="container mx-auto my-8 px-4 py-8 w-3/4 border-solid border-2 border-orange-600 text-white rounded-lg shadow-lg m-auto">
+  <h1 class="text-3xl font-bold text-center mb-8 text-orange-600">API TESTER</h1>
+
+  <!-- Input for API URL -->
+  <div class="mb-4">
+    <label class="block text-gray-400">API URL:</label>
+    <input type="text" [(ngModel)]="apiUrl" placeholder="Enter API URL" class="w-full border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 bg-gray-800 text-white">
+  </div>
+
+  <!-- HTTP method selection -->
+  <div class="mb-4">
+    <label class="block text-gray-400">Method:</label>
+    <select [(ngModel)]="selectedMethod" class="w-full border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 bg-gray-800 text-white">
+      <option value="GET">GET</option>
+      <option value="POST">POST</option>
+      <option value="PUT">PUT</option>
+      <option value="DELETE">DELETE</option>
+    </select>
+  </div>
+
+  <!-- Headers section -->
+  <div class="mb-4">
+    <h2 class="text-xl font-semibold mb-2">Headers</h2>
+    <label class="block text-gray-400">Authorization Token:</label>
+    <input type="text" [(ngModel)]="authToken" class="w-full border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 bg-gray-800 text-white">
+  </div>
+
+  <!-- Request body section -->
+  <div class="mb-4">
+    <h2 class="text-xl font-semibold mb-2">Request Body</h2>
+    <label class="block text-gray-400">Body Type:</label>
+    <select [(ngModel)]="selectedBodyType" (change)="changeBodyType()" class="w-full border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 bg-gray-800 text-white">
+      <option value="json">JSON</option>
+      <option value="formdata">Form Data</option>
+      <option value="params">Params</option>
+    </select>
+    
+    <!-- JSON body fields -->
+    <div *ngIf="selectedBodyType === 'json'" class="mt-4">
+      <label class="block text-gray-400">JSON Data:</label>
+      <textarea [(ngModel)]="jsonData" class="w-full border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 bg-gray-800 text-white" rows="6" placeholder="Enter JSON data"></textarea>
+    </div>
+
+    <!-- Params body fields -->
+    <div *ngIf="selectedBodyType === 'params'" class="mt-4">
+      <div *ngFor="let field of paramsFields; let i = index" class="flex mb-2">
+        <input type="text" [(ngModel)]="paramsFields[i].key" placeholder="Key" class="flex-1 border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-2">
+        <input type="text" [(ngModel)]="paramsFields[i].value" placeholder="Value" class="flex-1 border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-2">
+        <button (click)="removeField(i, paramsFields)" class="flex-none bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md">Remove</button>
+      </div>
+      <button (click)="addField(paramsFields)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md">Add Field</button>
+    </div>
+    
+    <!-- Form Data body fields -->
+    <div *ngIf="selectedBodyType === 'formdata'" class="mt-4">
+      <div *ngFor="let field of formDataFields; let i = index" class="flex mb-2">
+        <input type="text" [(ngModel)]="formDataFields[i].key" placeholder="Key" class="flex-1 border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-2">
+        <input type="text" [(ngModel)]="formDataFields[i].value" placeholder="Value" class="flex-1 border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-2">
+        <button (click)="removeField(i, formDataFields)" class="flex-none bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md">Remove</button>
+      </div>
+      <button (click)="addField(formDataFields)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md">Add Field</button>
+    </div>
+  </div>
+  
+  <!-- Send request button -->
+  <button (click)="sendRequest()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md">Send Request</button>
+  
+  <!-- Response display -->
+  <div class="mt-8">
+    <h2 class="text-xl font-semibold mb-2">Response</h2>
+    <pre class="border border-gray-600 rounded-md p-4 bg-gray-800 overflow-x-auto">{{ response }}</pre>
+  </div>
+</div>
